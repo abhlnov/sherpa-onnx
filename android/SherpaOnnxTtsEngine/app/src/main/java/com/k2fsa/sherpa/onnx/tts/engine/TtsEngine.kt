@@ -167,35 +167,4 @@ object TtsEngine {
             Log.e(TAG, "Failed to copy $filename, $ex")
         }
     }
-}dir = File(fullPath)
-                dir.mkdirs()
-                for (asset in assets.iterator()) {
-                    val p: String = if (path == "") "" else "$path/"
-                    copyAssets(context, p + asset)
-                }
-            }
-        } catch (ex: IOException) {
-            Log.e(TAG, "Failed to copy $path. $ex")
-        }
-    }
-
-    private fun copyFile(context: Context, filename: String) {
-        try {
-            val istream = context.assets.open(filename)
-            val newFilename = context.getExternalFilesDir(null).toString() + "/" + filename
-            val ostream = FileOutputStream(newFilename)
-            // Log.i(TAG, "Copying $filename to $newFilename")
-            val buffer = ByteArray(1024)
-            var read = 0
-            while (read != -1) {
-                ostream.write(buffer, 0, read)
-                read = istream.read(buffer)
-            }
-            istream.close()
-            ostream.flush()
-            ostream.close()
-        } catch (ex: Exception) {
-            Log.e(TAG, "Failed to copy $filename, $ex")
-        }
-    }
 }
