@@ -16,6 +16,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Download Pre-built C++ Libraries
+        run: |
+          mkdir temp_jni && cd temp_jni
+          wget https://github.com/k2-fsa/sherpa-onnx/releases/download/v1.13.4/sherpa-onnx-v1.13.4-android.tar.bz2
+          tar -xjf sherpa-onnx-v1.13.4-android.tar.bz2
+          JNI_SRC=$(find . -type d -name "jniLibs")
+          cp -r $JNI_SRC ../android/SherpaOnnxTtsEngine/app/src/main/
+          cd ..
+
       - name: Download Model and Espeak Data
         run: |
           ASSETS_DIR="android/SherpaOnnxTtsEngine/app/src/main/assets/abhinox-voice"
@@ -34,11 +43,10 @@ jobs:
         working-directory: android/SherpaOnnxTtsEngine
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: abhinox-tts-apk
-          path: android/SherpaOnnxTtsEngine/app/build/outputs/apk/release/*.apk
-          
+          path: android/SherpaOnnxTtsEngine/app/build/outputs/apk/debug/*.apk
